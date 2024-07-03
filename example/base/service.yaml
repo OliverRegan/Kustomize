@@ -4,10 +4,22 @@ metadata:
   name: example-app
 spec:
   selector:
-    app: example
+    app: example-app
+  clusterIP: 10.43.21.125
+  clusterIPs:
+  - 10.43.21.125
+  externalIPs:
+  - 192.168.0.25
+  externalTrafficPolicy: Cluster
+  internalTrafficPolicy: Cluster
+  ipFamilies:
+  - IPv4
+  ipFamilyPolicy: SingleStack
   ports:
   - name: http
     port: 80
     nodePort: 30330
     protocol: TCP
     targetPort: 80
+  sessionAffinity: None
+  type: NodePort
