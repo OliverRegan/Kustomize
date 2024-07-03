@@ -4,8 +4,6 @@ kind: Kustomization
 resources:
   - deployment.yaml
   - service.yaml
-common-labels:
-  app.kubernetes.io/name: example-app
 images:
   - name: 
     newTag: latest
