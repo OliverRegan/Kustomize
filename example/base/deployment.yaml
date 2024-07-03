@@ -4,9 +4,13 @@ metadata:
   name: example-app
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      app: example-app
   template:
     metadata:
-      labels: example-app
+      labels: 
+        app: example-app
     spec:
       containers:
       - name: example-app
