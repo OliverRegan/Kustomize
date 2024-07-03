@@ -8,8 +8,8 @@ images:
   - name: 
     newTag: latest
     newName:
-configMapGenerator:
-  - name: example-app
-  # for java?
-    files:
-      application.yaml
+# configMapGenerator:
+#   - name: example-app
+#   # for java?
+#     files:
+#       application.yaml
