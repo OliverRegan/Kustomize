@@ -5,12 +5,9 @@ metadata:
 spec:
   replicas: 1
   template:
-    metadata:
-      labels:
-        app: example
     spec:
       containers:
-      - name: nginx
+      - name: example-app
         image: nginx:1.14.2
         ports:
           - containerPort: 80
