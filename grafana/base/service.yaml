@@ -5,7 +5,7 @@ metadata:
   namespace: grafana
 spec:
   selector:
-    app: grafana
+    app: grafana-dashboard
   externalIPs:
   - 192.168.0.25
   externalTrafficPolicy: Cluster
