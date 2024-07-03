@@ -4,11 +4,20 @@ metadata:
   name: grafana-dashboard
   namespace: grafana
 spec:
-  ports:
-  - port: 3000
-    protocol: TCP
-    targetPort: http-grafana
   selector:
     app: grafana
+  externalIPs:
+  - 192.168.0.25
+  externalTrafficPolicy: Cluster
+  internalTrafficPolicy: Cluster
+  ipFamilies:
+  - IPv4
+  ipFamilyPolicy: SingleStack
+  ports:
+  - name: http
+    port: 3000
+    nodePort: 31299
+    protocol: TCP
+    targetPort: 3000
   sessionAffinity: None
-  type: LoadBalancer
+  type: NodePort
