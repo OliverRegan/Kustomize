@@ -8,5 +8,6 @@ spec:
   ports:
   - name: http
     port: 80
+    nodePort: 30330
     protocol: TCP
     targetPort: 80
