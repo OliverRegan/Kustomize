@@ -4,6 +4,7 @@ metadata:
   labels:
     app: grafana-dashboard
   name: grafana-dashboard
+  namespace: grafana
 spec:
   selector:
     matchLabels:
