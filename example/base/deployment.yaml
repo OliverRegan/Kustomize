@@ -5,6 +5,8 @@ metadata:
 spec:
   replicas: 1
   template:
+    metadata:
+      name: example-app
     spec:
       containers:
       - name: example-app
