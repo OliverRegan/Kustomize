@@ -7,7 +7,8 @@ spec:
   replicas: 1
   podManagementPolicy: Parallel
   selector:
-    app: mssql
+    matchLabels:
+      app: mssql
   template:
     metadata:
       labels:
@@ -29,10 +30,11 @@ spec:
         - name: MSSQL_AGENT_ENABLED
           value: "1"
         - name: MSSQL_SA_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: mssql
-              key: MSSQL_SA_PASSWORD
+          value: "yeAndOrHaw"
+          # valueFrom:
+        #   secretKeyRef:
+        #     name: mssql
+        #     key: MSSQL_SA_PASSWORD
         volumeMounts:
         - name: mssql
           mountPath: "/var/opt/mssql"
