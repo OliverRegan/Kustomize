@@ -1,0 +1,17 @@
+# Source: kestra/charts/minio/templates/pvc.yaml
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: kestra-minio
+  namespace: "default"
+  labels:
+    app: minio
+    chart: minio-4.1.0
+    release: kestra
+    heritage: Helm
+spec:
+  accessModes:
+    - "ReadWriteOnce"
+  resources:
+    requests:
+      storage: "8Gi"

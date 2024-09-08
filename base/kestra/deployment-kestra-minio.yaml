@@ -1,0 +1,81 @@
+# Source: kestra/charts/minio/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kestra-minio
+  namespace: "default"
+  labels:
+    app: minio
+    chart: minio-4.1.0
+    release: kestra
+    heritage: Helm
+spec:
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 100%
+      maxUnavailable: 0
+  replicas: 1
+  selector:
+    matchLabels:
+      app: minio
+      release: kestra
+  template:
+    metadata:
+      name: kestra-minio
+      labels:
+        app: minio
+        release: kestra
+      annotations:
+        checksum/secrets: b65218564c458a2298c1ba50df8e5b468c0c9d1bb8ebb18f33ca4001030a12d5
+        checksum/config: e649c2b2e83899705ea0d800d2b37606ff26572eb1fcd020c6fd57a3d79f6fdf
+    spec:
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        fsGroupChangePolicy: OnRootMismatch
+
+      serviceAccountName: minio-sa
+      containers:
+        - name: minio
+          image: "quay.io/minio/minio:RELEASE.2022-10-24T18-35-07Z"
+          imagePullPolicy: IfNotPresent
+          command:
+            - "/bin/sh"
+            - "-ce"
+            - "/usr/bin/docker-entrypoint.sh minio server /export -S /etc/minio/certs/ --address :9000 --console-address :9001"
+          volumeMounts:
+            - name: minio-user
+              mountPath: "/tmp/credentials"
+              readOnly: true
+            - name: export
+              mountPath: /export            
+          ports:
+            - name: http
+              containerPort: 9000
+            - name: http-console
+              containerPort: 9001
+          env:
+            - name: MINIO_ROOT_USER
+              valueFrom:
+                secretKeyRef:
+                  name: kestra-minio
+                  key: rootUser
+            - name: MINIO_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: kestra-minio
+                  key: rootPassword
+            - name: MINIO_PROMETHEUS_AUTH_TYPE
+              value: "public"
+          resources:
+            requests:
+              memory: 512Mi      
+      volumes:
+        - name: export
+          persistentVolumeClaim:
+            claimName: kestra-minio
+        - name: minio-user
+          secret:
+            secretName: kestra-minio

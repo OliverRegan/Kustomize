@@ -1,0 +1,48 @@
+# Source: kestra/charts/minio/templates/post-install-create-user-job.yaml
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: kestra-minio-make-user-job
+  namespace: "default"
+  labels:
+    app: minio-make-user-job
+    chart: minio-4.1.0
+    release: kestra
+    heritage: Helm
+  annotations:
+    "helm.sh/hook": post-install,post-upgrade
+    "helm.sh/hook-delete-policy": hook-succeeded,before-hook-creation
+spec:
+  template:
+    metadata:
+      labels:
+        app: minio-job
+        release: kestra
+    spec:
+      restartPolicy: OnFailure      
+      volumes:
+        - name: minio-configuration
+          projected:
+            sources:
+            - configMap:
+                name: kestra-minio
+            - secret:
+                name: kestra-minio
+
+      serviceAccountName: minio-sa
+      containers:
+      - name: minio-mc
+        image: "quay.io/minio/mc:RELEASE.2022-10-20T23-26-33Z"
+        imagePullPolicy: IfNotPresent
+        command: ["/bin/sh", "/config/add-user"]
+        env:
+          - name: MINIO_ENDPOINT
+            value: kestra-minio
+          - name: MINIO_PORT
+            value: "9000"
+        volumeMounts:
+          - name: minio-configuration
+            mountPath: /config
+        resources:
+          requests:
+            memory: 128Mi
