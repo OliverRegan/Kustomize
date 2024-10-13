@@ -1,9 +1,11 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
 resources:
 - deployment.yaml
 - service.yaml
 - configmap.yaml
-
-configMapGenerator:
-- name: pihole-config
-  files:
-  - 01-pihole.conf
+images:
+- name:
+  newTag: latest
+  newName:
