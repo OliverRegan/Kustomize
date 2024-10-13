@@ -10,6 +10,9 @@ spec:
   - 192.168.0.103
   externalTrafficPolicy: Cluster
   internalTrafficPolicy: Cluster
+  ipFamilies:
+  - IPv4
+  ipFamilyPolicy: SingleStack
   ports:
   - name: http # Name for the HTTP port
     port: 80 # Service port
