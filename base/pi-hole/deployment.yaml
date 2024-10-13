@@ -2,6 +2,8 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: pihole
+  labels:
+    app: pihole
 spec:
   replicas: 1
   selector:
@@ -14,26 +16,31 @@ spec:
     spec:
       containers:
       - name: pihole
-        image: pihole/pihole:latest
-        ports:
-        - containerPort: 80
-        - containerPort: 53
+        image: pihole/pihole:latest # Use the latest Pi-hole image or a specific version
         env:
         - name: TZ
-          value: "Australia/Melbourne"
+          value: "Australia/Melbourne" # Set your timezone
         - name: WEBPASSWORD
-          value: "securestPasswordEver123!@#"
-        resources:
-          limits:
-            memory: "500Mi"
-            cpu: "500m"
+          valueFrom:
+            configMapKeyRef:
+              name: pihole-config
+              key: WEBPASSWORD # Use the password from the ConfigMap
+        - name: DNS1
+          value: "8.8.8.8" # Primary DNS server
+        - name: DNS2
+          value: "8.8.4.4" # Secondary DNS server
+        ports:
+        - containerPort: 80 # HTTP port
+        - containerPort: 53 # DNS port (TCP and UDP)
         volumeMounts:
-        - name: pihole-config
-          mountPath: /etc/pihole
-        - name: dnsmasq-config
-          mountPath: /etc/dnsmasq.d
+        - name: pihole-storage
+          mountPath: /etc/pihole # Persistent storage for Pi-hole
+        - name: dnsmasq-storage
+          mountPath: /etc/dnsmasq.d # Persistent storage for dnsmasq
       volumes:
-      - name: pihole-config
-        emptyDir: {}
-      - name: dnsmasq-config
-        emptyDir: {}
+      - name: pihole-storage
+        persistentVolumeClaim:
+          claimName: pihole-pvc # Name of the PVC for Pi-hole data
+      - name: dnsmasq-storage
+        persistentVolumeClaim:
+          claimName: dnsmasq-pvc # Name of the PVC for dnsmasq data
