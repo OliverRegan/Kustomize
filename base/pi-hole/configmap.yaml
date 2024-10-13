@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: pihole-config
+data:
+  01-pihole.conf: |
+    # Pi-hole: A black hole for Internet advertisements
+    # (c) 2017 Pi-hole LLC (https://pi-hole.net)
+    # Network-wide ad blocking via your own hardware.
+    addn-hosts=/etc/pihole/custom.list
+    localise-queries
+    no-resolv
+    cache-size=10000
+    log-queries
+    log-facility=/var/log/pihole.log
+    server=8.8.8.8
+    server=8.8.4.4

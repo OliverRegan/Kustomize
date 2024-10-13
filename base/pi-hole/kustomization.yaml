@@ -1,0 +1,9 @@
+resources:
+- deployment.yaml
+- service.yaml
+- configmap.yaml
+
+configMapGenerator:
+- name: pihole-config
+  files:
+  - 01-pihole.conf
