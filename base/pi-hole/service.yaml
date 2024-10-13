@@ -7,12 +7,19 @@ metadata:
 spec:
   type: NodePort
   ports:
-  - port: 80
-    targetPort: 80
-    nodePort: 30080 # Specify the node port you want
-  - port: 53
+  - name: http # Name for the HTTP port
+    port: 80 # Service port
+    targetPort: 80 # Port on the Pi-hole pod
+    nodePort: 30080 # Node port for HTTP
+  - name: dns-tcp # Name for the DNS TCP port
+    port: 53 # Service port
+    protocol: TCP
+    targetPort: 53 # Port on the Pi-hole pod
+    nodePort: 30053 # Node port for DNS over TCP
+  - name: dns-udp # Name for the DNS UDP port
+    port: 53 # Service port
     protocol: UDP
-    targetPort: 53
-    nodePort: 30053 # Specify the node port for UDP
+    targetPort: 53 # Port on the Pi-hole pod
+    nodePort: 30054 # Node port for DNS over UDP
   selector:
     app: pihole
