@@ -1,10 +1,10 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: pihole
-  labels:
-    app: pihole
+  name: pihole-service
 spec:
+  selector:
+    app: pihole
   type: NodePort
   externalIPs:
   - 192.168.0.103
@@ -25,5 +25,4 @@ spec:
     protocol: UDP
     targetPort: 53 # Port on the Pi-hole pod
     nodePort: 30054 # Node port for DNS over UDP
-  selector:
-    app: pihole
+
