@@ -6,6 +6,10 @@ metadata:
     app: pihole
 spec:
   type: NodePort
+  externalIPs:
+  - 192.168.0.103
+  externalTrafficPolicy: Cluster
+  internalTrafficPolicy: Cluster
   ports:
   - name: http # Name for the HTTP port
     port: 80 # Service port
